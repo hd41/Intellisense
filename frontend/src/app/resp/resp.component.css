@@ -1,0 +1,75 @@
+.respComp{
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.resp_header{
+  margin-top: 10px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.resp_cart{
+  max-height: 90vh;
+  overflow-y: scroll;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+img{
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.resp_card{
+  width: 97%;
+  box-shadow: 5px 4px 6px solid #fff;
+  background-color: white;
+  color: #2F2FFB;
+  margin: 0 auto;
+  padding: 10px;
+  margin-bottom: 20px;
+  /* animation-name: fadeIn;
+  animation-duration: 2s;
+  animation-iteration-count: infinite; */
+
+}
+
+.resp_new_card{
+  width: 100%;
+  box-shadow: 5px 4px 6px solid #fff;
+  background-color: #dcded1;
+  color: #20242b;
+  margin: 0 auto;
+  padding: 10px;
+  margin-bottom: 20px;
+
+}
+
+/* #axis:hover .move-up {
+    transform: translate(0,-80px);
+    -webkit-transform: translate(0,-80px);
+    -o-transform: translate(0,-80px);
+    -moz-transform: translate(0,-80px);
+} */
+
+
+.names{
+  font-size: 1.2rem;
+  color: #20242B;
+}
+
+.message{
+  font-size: 1rem;
+  color: #515b6b;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}

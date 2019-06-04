@@ -1,0 +1,27 @@
+<div class="ques_page">
+  <h1>FIL Questionnaire</h1>
+  <div class="currentQues">
+    <div class="ques_comp">
+      <h1>{{ ques }}</h1>
+    </div>
+  </div>
+  <div class="new_ques">
+
+    <div class="group">
+      <input type="textarea" name="message" [(ngModel)]="message" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>Question</label>
+    </div>
+
+    <div class="group">
+      <input type="text" name="askedBy" [(ngModel)]="responder" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>Name</label>
+    </div>
+
+  </div>
+</div>
+
+<button class="btn submit_button" type="button" name="button" (click)="submitQues()"><b>Submit Question</b></button>

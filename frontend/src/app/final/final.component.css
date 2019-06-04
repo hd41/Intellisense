@@ -1,0 +1,17 @@
+.ques_outer_comp{
+  width: 100%;
+}
+.ques-comp{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 10%;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #005F93;
+    color: white;
+}

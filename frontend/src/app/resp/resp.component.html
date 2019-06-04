@@ -1,0 +1,28 @@
+<div class="respComp " >
+  <div class="resp_cart" #scrollMe [scrollTop]="scrollMe.scrollHeight" id="axis">
+    <!-- <div class="row resp_card" *ngFor="let ind of index1;"> -->
+    <div class="" *ngFor="let ind of index2;">
+      <div class="row resp_card "  *ngIf="names[ind]">
+        <div class="col-md-2" >
+          <img src="/assets/user.png" alt="">
+        </div>
+        <div class="col-md-10">
+          <b><span class="names">{{ names[ind] }}</span></b><br>
+          <span class="message">{{ messages[ind] }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row resp_new_card move-up animated bounce delay-2s" *ngIf="names[lst_idx]">
+        <div class="col-md-2">
+          <img src="/assets/user.png" alt="">
+        </div>
+        <div class="col-md-10">
+          <b>{{ names[lst_idx] }}</b><br>
+          {{ messages[lst_idx] }}
+        </div>
+    </div>
+
+  </div>
+
+</div>

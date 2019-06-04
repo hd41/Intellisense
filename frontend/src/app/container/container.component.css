@@ -1,0 +1,18 @@
+.body_div{
+  width: 80%;
+  height: 94vh;
+  margin: 0 auto;
+  margin-top: 3vh;
+  box-shadow: 10px 8px 8px 8px #888888;
+}
+.ques_holder{
+  background-color: #005F93; /* FIL Red -> B82A26*/
+  height: 94vh;
+  color: white;
+}
+
+.resp_holder{
+  background-color: #f7f7f8; /* 242582 */
+  height: 94vh;
+  color: white;
+}
