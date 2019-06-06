@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AlertsModule } from 'angular-alert-module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,7 +38,8 @@ import { FinalComponent } from './final/final.component';
     AppRoutingModule,
     HttpClientModule,
     APP_ROUTES_PROVIDER,
-    FormsModule
+    FormsModule,
+    AlertsModule.forRoot()
   ],
   providers: [
     WebSocketService,
