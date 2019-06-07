@@ -15,13 +15,15 @@
     </div>
 
     <div class="group">
-      <input type="text" name="askedBy" [(ngModel)]="responder" required>
+      <input type="password" name="askedBy" [(ngModel)]="askedBy" required>
       <span class="highlight"></span>
       <span class="bar"></span>
-      <label>Name</label>
+      <label>Password</label>
     </div>
-
   </div>
+  <div class="alert">
+    <app-alerts></app-alerts>
+  </div>  
 </div>
 
 <button class="btn submit_button" type="button" name="button" (click)="submitQues()"><b>Submit Question</b></button>

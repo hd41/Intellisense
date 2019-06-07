@@ -26,10 +26,11 @@ export class RespComponent implements OnInit {
 
       console.log("Received response: "+msg);
 
-      if(msg == "$"){
+      if(msg == "$"){  // condition where question is reset
         this.clearMessages();
       }else{
         var splitVal = msg.split(":");
+
         if(splitVal[0] == "undefined"){
           this.names.push("Anonymous");
         }else{
@@ -42,6 +43,8 @@ export class RespComponent implements OnInit {
         this.lst_idx = this.index1[this.index1.length-1];
 
         this.messages.push(splitVal[1]);
+
+        console.log(this.names);
       }
     })
   }
@@ -53,7 +56,6 @@ export class RespComponent implements OnInit {
   moveTicker(){
       var poppedElement = this.index1.shift();
       if(poppedElement != null){
-        // this.index1.push(poppedElement);
         this.index1.splice(this.index1.length - 1, 0, poppedElement);
         this.index2 = this.index1.slice(0, this.idx);
         this.lst_idx = this.index1[this.index1.length-1];

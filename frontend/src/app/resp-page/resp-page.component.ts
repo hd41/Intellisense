@@ -16,7 +16,8 @@ export class RespPageComponent implements OnInit {
   private ques: string;
   private mobile: string;
 
-  constructor(private respService: RespServiceService, private quesService: QuesServiceService, private router: Router, private alerts: AlertsService) { }
+  constructor(private respService: RespServiceService, private quesService: QuesServiceService,
+    private router: Router, private alerts: AlertsService) { }
 
   ngOnInit() {
     this.quesService.getLatestQuestion().subscribe(data =>{
@@ -47,9 +48,8 @@ export class RespPageComponent implements OnInit {
       if(this.mobile.match(phoneno)){
         return true;
       }else{
-        this.alerts.setMessage('All the fields are required','error');
+        this.alerts.setMessage('All fields are required','error');
         // this.alerts.setMessage('Configurations saved successfully!','success');
-        // this.alerts.setMessage('Please save all the changes before closing','warn');
       }
     }
     return false;

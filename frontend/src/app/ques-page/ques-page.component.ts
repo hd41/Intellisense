@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { QuesServiceService } from '../Services/quesService/ques-service.service';
 import { Router } from '@angular/router';
+import { AlertsService } from 'angular-alert-module';
 
 @Component({
   selector: 'app-ques-page',
@@ -13,7 +14,7 @@ export class QuesPageComponent implements OnInit {
   private askedBy : string;
   private message: string;
   private newDiv: Boolean = false;
-  constructor(private quesService: QuesServiceService, private router: Router) { }
+  constructor(private quesService: QuesServiceService, private router: Router, private alerts: AlertsService) { }
 
   ngOnInit() {
     this.quesService.getLatestQuestion().subscribe(data =>{
@@ -29,14 +30,31 @@ export class QuesPageComponent implements OnInit {
   }
 
   submitQues(){
-    let obj = {"askedBy":this.askedBy,"message":this.message};
-    this.quesService.postLatestQues(obj).subscribe(data =>{
-        this.ques = this.message;
-        this.toggleQues();
-        this.router.navigate(['/done']);
-    }, err =>{
-      console.log(err);
-    });
+    if(this.validate()){
+      let obj = {"askedBy":this.askedBy,"message":this.message};
+      this.quesService.postLatestQues(obj).subscribe(data =>{
+          this.ques = this.message;
+          this.toggleQues();
+          this.router.navigate(['/done']);
+      }, err =>{
+        console.log(err);
+      });
+    }
+  }
+
+  validate(){
+    console.log(this.askedBy);
+    if(this.askedBy == "sambhav789"){
+      console.log(this.message);
+      if(this.message == undefined){
+        this.router.navigate(['/qweqjvnvjiadsafkajkjsaiqwoqninviw']);
+        return false;
+      }
+      return true;
+    }else{
+      this.alerts.setMessage('Not authorised to put question.','warn');
+    }
+    return false;
   }
 
 }

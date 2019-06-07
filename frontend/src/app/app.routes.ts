@@ -8,7 +8,12 @@ import { FinalComponent } from './final/final.component';
 
 const routes:Routes = [
     {
-        path:'',
+        path: '',
+        redirectTo: 'response',
+        pathMatch: 'full'
+    },
+    {
+        path:'qweqjvnvjiadsafkajkjsaiqwoqninviw',
         component: ContainerComponent
     },
     {
@@ -16,7 +21,7 @@ const routes:Routes = [
       component: QuesPageComponent
     },
     {
-      path:'resp',
+      path:'response',
       component: RespPageComponent
     },
     {
