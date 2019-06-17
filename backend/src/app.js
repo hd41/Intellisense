@@ -5,8 +5,7 @@ var io      = require('socket.io').listen(server);
 var cors    = require('cors');
 var bodyParser = require('body-parser');
 var dbConn = require('./backend-db');
-// var MongoClient = require('mongodb').MongoClient;
-// var url = "mongodb://localhost:27017/";
+
 var http = require('http');
 
 app.use(bodyParser.json()); // support json encoded bodies
@@ -23,25 +22,8 @@ var q_id = '0';
 var question = 'ads';
 var responses = [];
 
-dbConn.findLatestQuestion().then(function(result){
-  question = result.question;
-  q_id = result.timestamp;
-  dbConn.findLatestResponses(q_id).then(function(result){
-    responses = result.slice(0);
-    console.log(question+" :- "+q_id+" :- "+responses);
-  });
-});
-
 io.on("connection", socket => {
   let previousId;
-  dbConn.findLatestQuestion().then(function(result){
-    question = result.question;
-    q_id = result.timestamp;
-    dbConn.findLatestResponses(q_id).then(function(result){
-      responses = result.slice(0);
-      console.log(question+" :- "+q_id+" :- "+responses);
-    });
-  });
 
   const safeJoin = currentId => {
     socket.leave(previousId);
@@ -50,15 +32,27 @@ io.on("connection", socket => {
   };
 
   socket.on("message", doc => {
+    console.log("doc: "+doc);
+
+    u_id = "5d07a47ce3ab67055483bda9";
+    dbConn.findLatestQuestionByUserID(u_id).then(function(result){
+      question = result.question;
+      q_id = result.timestamp;
+      dbConn.findLatestResponses(q_id).then(function(result){
+        responses = result.slice(0);
+        console.log(question+" :- "+q_id+" :- "+responses);
+      });
+    });
+
     io.emit("documents", Object.keys(documents));
     socket.emit("document", doc);
+
   });
 
   socket.on("editDoc", doc => {
     documents[doc.id] = doc;
     socket.to(doc.id).emit("document", doc);
   });
-
 
   io.emit("message",question);
   io.emit("response", "$");
@@ -67,8 +61,24 @@ io.on("connection", socket => {
     let resp = responses[i].response;
     io.emit("response",responder+":"+resp);
   }
+});
 
-  console.log("emitted");
+app.post('/register', (req,res) => {
+  var name = req.body.name;
+  var username = req.body.username;
+  var password = req.body.password;
+  var mobile = req.body.mobile;
+
+  dbConn.addUser(req, res, name,username, password,mobile);
+
+});
+
+app.post('/login', (req, res) => {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  dbConn.login(req, res, username, password);
+
 });
 
 app.post('/resp',(req, res) => {
@@ -99,29 +109,6 @@ app.post('/post_new_ques', function (req, res) {
   io.emit("message",question);
   res.send('{"message": "success"}');
 });
-
-
-// probably be getting the last question
-app.get('/getQuestion', function(req, res){
-  MongoClient.connect(url, function(err, db) {
-    console.log('connected to DB');
-    if (err) throw err;
-    var dbo = db.db("intellisense");
-    dbo.collection("questions").find({}).toArray(function(err, result) {
-      if (err) throw err;
-      console.log(result);
-      res.send(result);
-      db.close();
-    });
-  });
-});
-
-
-
-
-
-
-
 
 /* for Sentiment Analysis */
 function getScore(sentence){

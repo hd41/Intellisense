@@ -5,12 +5,22 @@ import { QuesPageComponent } from './ques-page/ques-page.component';
 import { RespPageComponent } from './resp-page/resp-page.component';
 import { ContainerComponent } from './container/container.component';
 import { FinalComponent } from './final/final.component';
+import { AdminComponent } from './admin/signup/admin.component';
+import { LoginComponent } from './admin/login/login.component';
 
 const routes:Routes = [
     {
         path: '',
         redirectTo: 'response',
         pathMatch: 'full'
+    },
+    {
+      path: 'admin',
+      component : AdminComponent
+    },
+    {
+      path: 'login',
+      component: LoginComponent
     },
     {
         path:'qweqjvnvjiadsafkajkjsaiqwoqninviw',

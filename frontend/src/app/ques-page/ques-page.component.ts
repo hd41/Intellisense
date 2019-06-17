@@ -31,7 +31,7 @@ export class QuesPageComponent implements OnInit {
 
   submitQues(){
     if(this.validate()){
-      let obj = {"askedBy":this.askedBy,"message":this.message};
+      let obj = {"askedBy":localStorage.getItem('sessionToken'),"message":this.message};
       this.quesService.postLatestQues(obj).subscribe(data =>{
           this.ques = this.message;
           this.toggleQues();

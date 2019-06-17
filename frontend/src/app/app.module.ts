@@ -22,6 +22,8 @@ import { QuesServiceService } from './Services/quesService/ques-service.service'
 import { RespServiceService } from './Services/respService/resp-service.service';
 import { ContainerComponent } from './container/container.component';
 import { FinalComponent } from './final/final.component';
+import { AdminComponent } from './admin/signup/admin.component';
+import { LoginComponent } from './admin/login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { FinalComponent } from './final/final.component';
     QuesPageComponent,
     RespPageComponent,
     ContainerComponent,
-    FinalComponent
+    FinalComponent,
+    AdminComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

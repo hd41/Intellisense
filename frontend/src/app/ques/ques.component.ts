@@ -14,13 +14,14 @@ export class QuesComponent implements OnInit {
   constructor(private chat: ChatService, private resp: RespComponent){ }
 
   ngOnInit() {
+    this.sendMessage();
     this.chat.messages.subscribe(msg => {
       this.ques = msg;
     })
   }
 
   sendMessage() {
-    this.chat.sendMsg("Test Message");
+    this.chat.sendMsg('"message":"'+localStorage.getItem('sessionToken')+'"');
   }
 
 }
