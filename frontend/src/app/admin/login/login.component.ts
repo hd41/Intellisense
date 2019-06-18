@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
       let obj = {"username":this.username,"password":this.password};
       this.loginService.getRespForLogin(obj).subscribe(data =>{
         console.log('In component: '+data.message);
-        localStorage.setItem('sessionToken',data.message.split(":")[1]);
+        sessionStorage.setItem('sessionToken',data.message.split(":")[1]);
         this.navigateToMain();
       }, err =>{
         console.log(err);
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   }
 
   navigateToMain(){
-    this.router.navigate(['/qweqjvnvjiadsafkajkjsaiqwoqninviw']);
+    this.router.navigate(['/main/'+sessionStorage.getItem('sessionToken')]);
   }
 
   validate(){

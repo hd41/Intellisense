@@ -18,35 +18,35 @@ app.use(cors({
 
 const documents = {};
 
-var q_id = '0';
-var question = 'ads';
 var responses = [];
 
 io.on("connection", socket => {
   let previousId;
 
-  const safeJoin = currentId => {
-    socket.leave(previousId);
-    socket.join(currentId);
-    previousId = currentId;
-  };
-
   socket.on("message", doc => {
-    console.log("doc: "+doc);
-
-    u_id = "5d07a47ce3ab67055483bda9";
+    doc = JSON.parse(doc);
+    console.log('server received: '+ doc.message);
+    u_id = doc.message;
     dbConn.findLatestQuestionByUserID(u_id).then(function(result){
-      question = result.question;
-      q_id = result.timestamp;
+      let q_id = result[0].timestamp;
+      if(result.length == 0){
+        socket.emit("message","Ask moderator to put Question");
+      }else{
+        socket.emit("message", result[0].question);
+      }
+      console.log("q_id: "+q_id);
       dbConn.findLatestResponses(q_id).then(function(result){
         responses = result.slice(0);
-        console.log(question+" :- "+q_id+" :- "+responses);
+        io.emit("response", "$");
+        console.log(responses);
+        for(var i=0; i < responses.length; i++){
+          let responder = responses[i].responder;
+          let resp = responses[i].response;
+          io.emit("response",responder+":"+resp+":"+u_id);
+        }
       });
     });
-
-    io.emit("documents", Object.keys(documents));
-    socket.emit("document", doc);
-
+    // socket.emit("document", doc);
   });
 
   socket.on("editDoc", doc => {
@@ -54,13 +54,7 @@ io.on("connection", socket => {
     socket.to(doc.id).emit("document", doc);
   });
 
-  io.emit("message",question);
-  io.emit("response", "$");
-  for(var i=0; i < responses.length; i++){
-    let responder = responses[i].responder;
-    let resp = responses[i].response;
-    io.emit("response",responder+":"+resp);
-  }
+
 });
 
 app.post('/register', (req,res) => {
@@ -82,17 +76,29 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/resp',(req, res) => {
+  var q_id = req.body.q_id;
   var responder = req.body.responder;
   var resp = req.body.response;
   var mobile = req.body.mobile;
+  var token = req.body.token;
+
   dbConn.addAnswer(q_id,resp, responder,mobile);
   // var scoreResponse = getScore(resp);
-  io.emit("response",responder+":"+resp);
+  io.emit("response",responder+":"+resp+":"+token);
   res.send('{"message":"success"}');
 });
 
 app.get('/get_latest_ques',(req,res)=>{
-  res.send('{"message": "'+question+'"}');
+  console.log(req.query.token);
+  dbConn.findLatestQuestionByUserID(req.query.token).then(function(result){
+    q_id = result.timestamp;
+    if(result.length == 0){
+      res.send('{"message": "No Question present"}');
+    }else{
+      res.send('{"q_id":"'+result[0].timestamp+'","message": "'+result[0].question+'"}');
+    }
+  });
+
 });
 
 app.post('/post_new_ques', function (req, res) {

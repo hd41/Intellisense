@@ -60,7 +60,7 @@ module.exports.findLatestQuestion = () => {
 
 module.exports.findLatestQuestionByUserID = (u_id) => {
   return new Promise(function(resolve, reject){
-    Question.find({ askedBy: u_id }).sort({timestamp: -1}).exec(function(err, res){
+    Question.find({ asked_by: u_id }).sort({timestamp: -1}).exec(function(err, res){
         if(err) throw reject(err);
         else{
           resolve(res);

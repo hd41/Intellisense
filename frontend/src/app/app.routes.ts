@@ -23,7 +23,7 @@ const routes:Routes = [
       component: LoginComponent
     },
     {
-        path:'qweqjvnvjiadsafkajkjsaiqwoqninviw',
+        path:'main/:id',
         component: ContainerComponent
     },
     {
@@ -31,7 +31,7 @@ const routes:Routes = [
       component: QuesPageComponent
     },
     {
-      path:'response',
+      path:'response/:token',
       component: RespPageComponent
     },
     {

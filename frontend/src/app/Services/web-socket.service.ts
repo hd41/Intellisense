@@ -33,7 +33,8 @@ export class WebSocketService {
 
     let observer = {
         next: (data: Object) => {
-            this.socket.emit(JSON.stringify(data));
+            console.log('In next: '+JSON.stringify(data));
+            this.socket.emit('message',JSON.stringify(data));
         },
     };
 

@@ -17,7 +17,7 @@ export class QuesPageComponent implements OnInit {
   constructor(private quesService: QuesServiceService, private router: Router, private alerts: AlertsService) { }
 
   ngOnInit() {
-    this.quesService.getLatestQuestion().subscribe(data =>{
+    this.quesService.getLatestQuestion(sessionStorage.getItem('sessionToken')).subscribe(data =>{
         this.ques = data.message;
         console.log(data);
     }, err =>{
