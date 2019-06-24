@@ -25,20 +25,17 @@ io.on("connection", socket => {
 
   socket.on("message", doc => {
     doc = JSON.parse(doc);
-    console.log('server received: '+ doc.message);
     u_id = doc.message;
     dbConn.findLatestQuestionByUserID(u_id).then(function(result){
       let q_id = result[0].timestamp;
       if(result.length == 0){
-        socket.emit("message","Ask moderator to put Question");
+        socket.emit("message","Ask moderator to put Question:"+u_id);
       }else{
-        socket.emit("message", result[0].question);
+        socket.emit("message", result[0].question+":"+u_id);
       }
-      console.log("q_id: "+q_id);
       dbConn.findLatestResponses(q_id).then(function(result){
         responses = result.slice(0);
         io.emit("response", "$");
-        console.log(responses);
         for(var i=0; i < responses.length; i++){
           let responder = responses[i].responder;
           let resp = responses[i].response;
@@ -53,7 +50,6 @@ io.on("connection", socket => {
     documents[doc.id] = doc;
     socket.to(doc.id).emit("document", doc);
   });
-
 
 });
 
@@ -104,16 +100,24 @@ app.get('/get_latest_ques',(req,res)=>{
 app.post('/post_new_ques', function (req, res) {
   var uname = req.body.askedBy;
   var ques = req.body.message;
-  if(ques == null){
-    question = "No Question present!!"
-  }else{
-    question = ques;
-    q_id = (Date.now());
-    dbConn.addQuestion(q_id, ques, uname);
-  }
-  io.emit("response","$");
-  io.emit("message",question);
-  res.send('{"message": "success"}');
+  var password = req.body.password;
+
+  dbConn.findUser(uname, password).then(function(result){
+    console.log("result: "+result);
+    if(result != null ){
+      question = ques;
+      q_id = (Date.now());
+      dbConn.addQuestion(q_id, ques, uname);
+
+      io.emit("response","$");
+      io.emit("message",question+":"+uname);
+      res.send('{"message": "success"}');
+
+    }else{
+      res.send('{"message": "failure"}');
+    }
+  });
+
 });
 
 /* for Sentiment Analysis */

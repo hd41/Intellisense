@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   }
 
   navigateToMain(){
-    this.router.navigate(['/main/'+sessionStorage.getItem('sessionToken')]);
+    this.router.navigate(['/navPage']);
   }
 
   validate(){

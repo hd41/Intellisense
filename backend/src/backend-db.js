@@ -49,6 +49,8 @@ module.exports.login = (req, res, username, password) => {
   });
 }
 
+
+
 module.exports.findLatestQuestion = () => {
   return new Promise(function(resolve, reject){
     Question.findOne({}).sort({timestamp: -1 }).exec(function(err, res){
@@ -61,6 +63,17 @@ module.exports.findLatestQuestion = () => {
 module.exports.findLatestQuestionByUserID = (u_id) => {
   return new Promise(function(resolve, reject){
     Question.find({ asked_by: u_id }).sort({timestamp: -1}).exec(function(err, res){
+        if(err) throw reject(err);
+        else{
+          resolve(res);
+        }
+    });
+  });
+}
+
+module.exports.findUser = (u_id, password) => {
+  return new Promise(function(resolve, reject){
+    User.findOne({ _id: u_id, password: password }).exec(function(err, res){
         if(err) throw reject(err);
         else{
           resolve(res);

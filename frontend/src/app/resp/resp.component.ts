@@ -25,14 +25,13 @@ export class RespComponent implements OnInit {
 
     this.chat.messages.subscribe(msg => {
 
-      console.log("Received response: "+msg);
-
       if(msg == "$"){  // condition where question is reset
         this.clearMessages();
       }else{
         var splitVal = msg.split(":");
 
         if(splitVal[2] == sessionStorage.getItem('sessionToken')){
+          
           if(splitVal[0] == "undefined"){
             this.names.push("Anonymous");
           }else{

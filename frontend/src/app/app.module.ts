@@ -24,6 +24,8 @@ import { ContainerComponent } from './container/container.component';
 import { FinalComponent } from './final/final.component';
 import { AdminComponent } from './admin/signup/admin.component';
 import { LoginComponent } from './admin/login/login.component';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { NavPageComponent } from './nav-page/nav-page.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { LoginComponent } from './admin/login/login.component';
     ContainerComponent,
     FinalComponent,
     AdminComponent,
-    LoginComponent
+    LoginComponent,
+    NavPageComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,8 @@ import { LoginComponent } from './admin/login/login.component';
     HttpClientModule,
     APP_ROUTES_PROVIDER,
     FormsModule,
-    AlertsModule.forRoot()
+    AlertsModule.forRoot(),
+    NgxQRCodeModule
   ],
   providers: [
     WebSocketService,

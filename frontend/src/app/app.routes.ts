@@ -7,6 +7,7 @@ import { ContainerComponent } from './container/container.component';
 import { FinalComponent } from './final/final.component';
 import { AdminComponent } from './admin/signup/admin.component';
 import { LoginComponent } from './admin/login/login.component';
+import { NavPageComponent } from './nav-page/nav-page.component';
 
 const routes:Routes = [
     {
@@ -27,7 +28,7 @@ const routes:Routes = [
         component: ContainerComponent
     },
     {
-      path:'ques',
+      path:'quest/:token',
       component: QuesPageComponent
     },
     {
@@ -37,6 +38,10 @@ const routes:Routes = [
     {
       path: 'done',
       component: FinalComponent
+    },
+    {
+      path: 'navPage',
+      component: NavPageComponent
     }
 ]
 

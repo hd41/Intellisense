@@ -11,9 +11,13 @@ import { AlertsService } from 'angular-alert-module';
 export class QuesPageComponent implements OnInit {
 
   private ques : string;
-  private askedBy : string;
+
+  private askedBy : string = sessionStorage.getItem('sessionToken');
   private message: string;
+  private password: string;
+
   private newDiv: Boolean = false;
+
   constructor(private quesService: QuesServiceService, private router: Router, private alerts: AlertsService) { }
 
   ngOnInit() {
@@ -30,8 +34,8 @@ export class QuesPageComponent implements OnInit {
   }
 
   submitQues(){
-    if(this.validate()){
-      let obj = {"askedBy":localStorage.getItem('sessionToken'),"message":this.message};
+    if(true){
+      let obj = {"askedBy":sessionStorage.getItem('sessionToken'),"message":this.message,"password":this.password};
       this.quesService.postLatestQues(obj).subscribe(data =>{
           this.ques = this.message;
           this.toggleQues();
@@ -40,21 +44,6 @@ export class QuesPageComponent implements OnInit {
         console.log(err);
       });
     }
-  }
-
-  validate(){
-    console.log(this.askedBy);
-    if(this.askedBy == "sambhav789"){
-      console.log(this.message);
-      if(this.message == undefined){
-        this.router.navigate(['/qweqjvnvjiadsafkajkjsaiqwoqninviw']);
-        return false;
-      }
-      return true;
-    }else{
-      this.alerts.setMessage('Not authorised to put question.','warn');
-    }
-    return false;
   }
 
 }

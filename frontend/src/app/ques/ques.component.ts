@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../Services/chat.service';
 import { RespComponent } from '../resp/resp.component';
+import { environment } from '../Services/environment';
 
 @Component({
   selector: 'app-ques',
@@ -11,11 +12,16 @@ export class QuesComponent implements OnInit {
 
   ques = 'No Question presented';
 
+  elementType : 'url' | 'canvas' | 'img' = 'url';
+  value : string = environment.frontend_url+'/response/'+sessionStorage.getItem('sessionToken');
+
   constructor(private chat: ChatService, private resp: RespComponent){ }
 
   ngOnInit() {
     this.chat.messages.subscribe(msg => {
-      this.ques = msg;
+      var msgParts = msg.split(":");
+      this.ques = msgParts[0];
+      sessionStorage.setItem('sessionToken',msgParts[1]);
     })
     this.sendMessage();
   }
