@@ -35,7 +35,7 @@ io.on("connection", socket => {
       }
       dbConn.findLatestResponses(q_id).then(function(result){
         responses = result.slice(0);
-        io.emit("response", "$");
+        io.emit("response", "$:"+u_id);
         for(var i=0; i < responses.length; i++){
           let responder = responses[i].responder;
           let resp = responses[i].response;
@@ -43,7 +43,6 @@ io.on("connection", socket => {
         }
       });
     });
-    // socket.emit("document", doc);
   });
 
   socket.on("editDoc", doc => {
@@ -94,13 +93,14 @@ app.get('/get_latest_ques',(req,res)=>{
       res.send('{"q_id":"'+result[0].timestamp+'","message": "'+result[0].question+'"}');
     }
   });
-
 });
 
 app.post('/post_new_ques', function (req, res) {
   var uname = req.body.askedBy;
   var ques = req.body.message;
   var password = req.body.password;
+
+  console.log(req.body);
 
   dbConn.findUser(uname, password).then(function(result){
     console.log("result: "+result);
@@ -109,10 +109,9 @@ app.post('/post_new_ques', function (req, res) {
       q_id = (Date.now());
       dbConn.addQuestion(q_id, ques, uname);
 
-      io.emit("response","$");
+      io.emit("response","$:"+uname);
       io.emit("message",question+":"+uname);
       res.send('{"message": "success"}');
-
     }else{
       res.send('{"message": "failure"}');
     }

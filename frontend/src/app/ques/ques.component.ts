@@ -20,8 +20,10 @@ export class QuesComponent implements OnInit {
   ngOnInit() {
     this.chat.messages.subscribe(msg => {
       var msgParts = msg.split(":");
-      this.ques = msgParts[0];
-      sessionStorage.setItem('sessionToken',msgParts[1]);
+      if(msgParts[1] == sessionStorage.getItem('sessionToken')){
+        this.ques = msgParts[0];        
+      }
+      // sessionStorage.setItem('sessionToken',msgParts[1]);
     })
     this.sendMessage();
   }

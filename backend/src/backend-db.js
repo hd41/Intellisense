@@ -73,6 +73,7 @@ module.exports.findLatestQuestionByUserID = (u_id) => {
 
 module.exports.findUser = (u_id, password) => {
   return new Promise(function(resolve, reject){
+    console.log("in backend-db"+u_id+" : "+password);
     User.findOne({ _id: u_id, password: password }).exec(function(err, res){
         if(err) throw reject(err);
         else{
