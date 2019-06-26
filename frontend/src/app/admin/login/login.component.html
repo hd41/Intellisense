@@ -1,17 +1,12 @@
 <div class="ques_page">
-  <h1>FIL Questionnaire</h1>
-  <div class="currentQues">
-    <div class="ques_comp">
-      <h1>{{ ques }}</h1>
-    </div>
-  </div>
+  <h3>Login to FIL Questionnaire</h3>
   <div class="new_ques">
 
     <div class="group">
-      <input type="textarea" name="message" [(ngModel)]="message" required>
+      <input type="textarea" name="username" [(ngModel)]="username" required>
       <span class="highlight"></span>
       <span class="bar"></span>
-      <label>Question</label>
+      <label>Username</label>
     </div>
 
     <div class="group">
@@ -20,10 +15,11 @@
       <span class="bar"></span>
       <label>Password</label>
     </div>
+
   </div>
   <div class="alert">
     <app-alerts></app-alerts>
   </div>
 </div>
 
-<button class="btn submit_button" type="button" name="button" (click)="submitQues()"><b>Submit Question</b></button>
+<button class="btn submit_button" type="button" name="button" (click)="login()"><b>Login</b></button>

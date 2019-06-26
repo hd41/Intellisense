@@ -1,0 +1,39 @@
+<div class="ques_page">
+  <h1>FIL Questionnaire</h1>
+  <div class="new_ques">
+
+    <div class="group">
+      <input type="textarea" name="name" [(ngModel)]="name" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>Name</label>
+    </div>
+
+    <div class="group">
+      <input type="textarea" name="username" [(ngModel)]="username" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>Username</label>
+    </div>
+
+    <div class="group">
+      <input type="textarea" name="mobile" [(ngModel)]="mobile" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>Mobile</label>
+    </div>
+
+    <div class="group">
+      <input type="password" name="password" [(ngModel)]="password" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>Password</label>
+    </div>
+
+  </div>
+  <div class="alert">
+    <app-alerts></app-alerts>
+  </div>
+</div>
+
+<button class="btn submit_button" type="button" name="button" (click)="register()"><b>Register</b></button>

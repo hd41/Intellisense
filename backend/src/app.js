@@ -5,8 +5,7 @@ var io      = require('socket.io').listen(server);
 var cors    = require('cors');
 var bodyParser = require('body-parser');
 var dbConn = require('./backend-db');
-// var MongoClient = require('mongodb').MongoClient;
-// var url = "mongodb://localhost:27017/";
+
 var http = require('http');
 
 app.use(bodyParser.json()); // support json encoded bodies
@@ -19,39 +18,31 @@ app.use(cors({
 
 const documents = {};
 
-var q_id = '0';
-var question = 'ads';
 var responses = [];
-
-dbConn.findLatestQuestion().then(function(result){
-  question = result.question;
-  q_id = result.timestamp;
-  dbConn.findLatestResponses(q_id).then(function(result){
-    responses = result.slice(0);
-    console.log(question+" :- "+q_id+" :- "+responses);
-  });
-});
 
 io.on("connection", socket => {
   let previousId;
-  dbConn.findLatestQuestion().then(function(result){
-    question = result.question;
-    q_id = result.timestamp;
-    dbConn.findLatestResponses(q_id).then(function(result){
-      responses = result.slice(0);
-      console.log(question+" :- "+q_id+" :- "+responses);
-    });
-  });
-
-  const safeJoin = currentId => {
-    socket.leave(previousId);
-    socket.join(currentId);
-    previousId = currentId;
-  };
 
   socket.on("message", doc => {
-    io.emit("documents", Object.keys(documents));
-    socket.emit("document", doc);
+    doc = JSON.parse(doc);
+    u_id = doc.message;
+    dbConn.findLatestQuestionByUserID(u_id).then(function(result){
+      let q_id = result[0].timestamp;
+      if(result.length == 0){
+        socket.emit("message","Ask moderator to put Question:"+u_id);
+      }else{
+        socket.emit("message", result[0].question+":"+u_id);
+      }
+      dbConn.findLatestResponses(q_id).then(function(result){
+        responses = result.slice(0);
+        io.emit("response", "$:"+u_id);
+        for(var i=0; i < responses.length; i++){
+          let responder = responses[i].responder;
+          let resp = responses[i].response;
+          io.emit("response",responder+":"+resp+":"+u_id);
+        }
+      });
+    });
   });
 
   socket.on("editDoc", doc => {
@@ -59,69 +50,74 @@ io.on("connection", socket => {
     socket.to(doc.id).emit("document", doc);
   });
 
+});
 
-  io.emit("message",question);
-  io.emit("response", "$");
-  for(var i=0; i < responses.length; i++){
-    let responder = responses[i].responder;
-    let resp = responses[i].response;
-    io.emit("response",responder+":"+resp);
-  }
+app.post('/register', (req,res) => {
+  var name = req.body.name;
+  var username = req.body.username;
+  var password = req.body.password;
+  var mobile = req.body.mobile;
 
-  console.log("emitted");
+  dbConn.addUser(req, res, name,username, password,mobile);
+
+});
+
+app.post('/login', (req, res) => {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  dbConn.login(req, res, username, password);
+
 });
 
 app.post('/resp',(req, res) => {
+  var q_id = req.body.q_id;
   var responder = req.body.responder;
   var resp = req.body.response;
   var mobile = req.body.mobile;
+  var token = req.body.token;
+
   dbConn.addAnswer(q_id,resp, responder,mobile);
   // var scoreResponse = getScore(resp);
-  io.emit("response",responder+":"+resp);
+  io.emit("response",responder+":"+resp+":"+token);
   res.send('{"message":"success"}');
 });
 
 app.get('/get_latest_ques',(req,res)=>{
-  res.send('{"message": "'+question+'"}');
+  console.log(req.query.token);
+  dbConn.findLatestQuestionByUserID(req.query.token).then(function(result){
+    q_id = result.timestamp;
+    if(result.length == 0){
+      res.send('{"message": "No Question present"}');
+    }else{
+      res.send('{"q_id":"'+result[0].timestamp+'","message": "'+result[0].question+'"}');
+    }
+  });
 });
 
 app.post('/post_new_ques', function (req, res) {
   var uname = req.body.askedBy;
   var ques = req.body.message;
-  if(ques == null){
-    question = "No Question present!!"
-  }else{
-    question = ques;
-    q_id = (Date.now());
-    dbConn.addQuestion(q_id, ques, uname);
-  }
-  io.emit("response","$");
-  io.emit("message",question);
-  res.send('{"message": "success"}');
-});
+  var password = req.body.password;
 
+  console.log(req.body);
 
-// probably be getting the last question
-app.get('/getQuestion', function(req, res){
-  MongoClient.connect(url, function(err, db) {
-    console.log('connected to DB');
-    if (err) throw err;
-    var dbo = db.db("intellisense");
-    dbo.collection("questions").find({}).toArray(function(err, result) {
-      if (err) throw err;
-      console.log(result);
-      res.send(result);
-      db.close();
-    });
+  dbConn.findUser(uname, password).then(function(result){
+    console.log("result: "+result);
+    if(result != null ){
+      question = ques;
+      q_id = (Date.now());
+      dbConn.addQuestion(q_id, ques, uname);
+
+      io.emit("response","$:"+uname);
+      io.emit("message",question+":"+uname);
+      res.send('{"message": "success"}');
+    }else{
+      res.send('{"message": "failure"}');
+    }
   });
+
 });
-
-
-
-
-
-
-
 
 /* for Sentiment Analysis */
 function getScore(sentence){

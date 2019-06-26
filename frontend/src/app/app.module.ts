@@ -22,6 +22,10 @@ import { QuesServiceService } from './Services/quesService/ques-service.service'
 import { RespServiceService } from './Services/respService/resp-service.service';
 import { ContainerComponent } from './container/container.component';
 import { FinalComponent } from './final/final.component';
+import { AdminComponent } from './admin/signup/admin.component';
+import { LoginComponent } from './admin/login/login.component';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { NavPageComponent } from './nav-page/nav-page.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,10 @@ import { FinalComponent } from './final/final.component';
     QuesPageComponent,
     RespPageComponent,
     ContainerComponent,
-    FinalComponent
+    FinalComponent,
+    AdminComponent,
+    LoginComponent,
+    NavPageComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +46,8 @@ import { FinalComponent } from './final/final.component';
     HttpClientModule,
     APP_ROUTES_PROVIDER,
     FormsModule,
-    AlertsModule.forRoot()
+    AlertsModule.forRoot(),
+    NgxQRCodeModule
   ],
   providers: [
     WebSocketService,

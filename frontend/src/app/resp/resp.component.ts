@@ -6,6 +6,7 @@ import { RespService } from '../Services/resp.service';
   templateUrl: './resp.component.html',
   styleUrls: ['./resp.component.css']
 })
+
 export class RespComponent implements OnInit {
 
   idx : number=-1;
@@ -24,27 +25,28 @@ export class RespComponent implements OnInit {
 
     this.chat.messages.subscribe(msg => {
 
-      console.log("Received response: "+msg);
+      var splitVal = msg.split(":");
 
-      if(msg == "$"){  // condition where question is reset
+      if(splitVal[0] == "$" && splitVal[1]== sessionStorage.getItem('sessionToken')){  // condition where question is reset
         this.clearMessages();
       }else{
-        var splitVal = msg.split(":");
 
-        if(splitVal[0] == "undefined"){
-          this.names.push("Anonymous");
-        }else{
-          this.names.push(splitVal[0]);
+        if(splitVal[2] == sessionStorage.getItem('sessionToken')){
+
+          if(splitVal[0] == "undefined"){
+            this.names.push("Anonymous");
+          }else{
+            this.names.push(splitVal[0]);
+          }
+          this.idx++ ;
+
+          this.index1.push(this.idx);
+          this.index2 = this.index1.slice(0, this.idx);
+          this.lst_idx = this.index1[this.index1.length-1];
+
+          this.messages.push(splitVal[1]);
         }
-        this.idx++ ;
 
-        this.index1.push(this.idx);
-        this.index2 = this.index1.slice(0, this.idx);
-        this.lst_idx = this.index1[this.index1.length-1];
-
-        this.messages.push(splitVal[1]);
-
-        console.log(this.names);
       }
     })
   }

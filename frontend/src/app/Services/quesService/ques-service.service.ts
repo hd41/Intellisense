@@ -16,8 +16,9 @@ export class QuesServiceService {
   latestQuesUrl = environment.backend_url+"/get_latest_ques";
   postNewQues = environment.backend_url+"/post_new_ques";
 
-  getLatestQuestion(): any{
-        return this.httpClient.get(`${this.latestQuesUrl}`).map(response =>{
+  getLatestQuestion(token): any{
+    console.log("message in ques-service: "+`${this.latestQuesUrl}`);
+        return this.httpClient.get(`${this.latestQuesUrl}`+"?token="+token).map(response =>{
             const response1 = response;
           return response1;
         }).catch(error => {
